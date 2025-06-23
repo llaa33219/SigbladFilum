@@ -1,0 +1,118 @@
+/* General Body Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+/* Header and Controls */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    background-color: #ffffff;
+    border-bottom: 1px solid #dee2e6;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+#controls button {
+    padding: 0.5rem 1rem;
+    margin-left: 0.5rem;
+    cursor: pointer;
+    border: 1px solid #007bff;
+    background-color: #007bff;
+    color: white;
+    border-radius: 0.25rem;
+    font-size: 0.9rem;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+#controls button:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+#controls button:disabled {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Main content area */
+main {
+    flex-grow: 1;
+    overflow: auto; /* Enables scrolling for the spreadsheet */
+}
+
+/* Spreadsheet table styling */
+#spreadsheet-container {
+    padding: 1rem;
+}
+
+table {
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+th, td {
+    border: 1px solid #ced4da;
+    padding: 0.25rem 0.5rem;
+    min-width: 120px;
+    height: 28px;
+    box-sizing: border-box;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.9rem;
+}
+
+/* Column and Row Headers */
+th {
+    background-color: #e9ecef;
+    font-weight: 600;
+    text-align: center;
+    user-select: none;
+}
+
+td {
+    background-color: #fff;
+}
+
+td.active-cell {
+    outline: 2px solid #007bff;
+    outline-offset: -2px;
+}
+
+td.selected-cell {
+    background-color: #d0e3ff; /* Light blue for selection */
+    border-color: #99c0ff;
+}
+
+td.current-execution {
+    background-color: #fff3cd; /* A light yellow to indicate execution point */
+}
+
+/* Cell input editor */
+.cell-input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    box-sizing: border-box;
+    padding: 0.25rem 0.5rem;
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+    background-color: transparent;
+    margin: -0.25rem -0.5rem; /* Counteract padding on td */
+} 
