@@ -8,12 +8,22 @@
 </head>
 <body>
     <header>
-        <h1>SigbladFilum Simulator</h1>
+        <h1 data-i18n-key="title">SigbladFilum Simulator</h1>
         <div id="controls">
-            <button id="run-btn">실행</button>
-            <button id="stop-btn">정지</button>
-            <button id="export-btn">내보내기</button>
-            <button id="import-btn">가져오기</button>
+            <button id="run-btn" data-i18n-key="run">실행</button>
+            <button id="stop-btn" data-i18n-key="stop">정지</button>
+            <button id="export-btn" data-i18n-key="export">내보내기</button>
+            <button id="import-btn" data-i18n-key="import">가져오기</button>
+            
+            <div class="lang-switcher">
+                <button id="lang-ko">KO</button>
+                <button id="lang-en">EN</button>
+            </div>
+            
+            <div class="theme-switcher">
+                <label for="theme-toggle" data-i18n-key="theme">테마</label>
+                <input type="checkbox" id="theme-toggle" aria-label="Toggle dark mode">
+            </div>
         </div>
     </header>
     <main>

@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const stopBtn = document.getElementById('stop-btn');
     const exportBtn = document.getElementById('export-btn');
     const importBtn = document.getElementById('import-btn');
+    const themeToggle = document.getElementById('theme-toggle');
+    const langKoBtn = document.getElementById('lang-ko');
+    const langEnBtn = document.getElementById('lang-en');
 
     const COLS = 26; // A-Z
     const ROWS = 100;
@@ -63,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleMouseDown(cell) {
         if (isRunning) return;
         isDragging = true;
+        document.body.classList.add('is-dragging');
         clearSelection();
         selection.start = cell.id;
         selection.end = cell.id;
@@ -78,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleMouseUp() {
         isDragging = false;
+        document.body.classList.remove('is-dragging');
     }
 
     function handleKeyDown(e) {
@@ -603,11 +608,72 @@ document.addEventListener('DOMContentLoaded', () => {
         input.click();
     }
 
+    // --- UI Features (Theme & i18n) ---
+    const translations = {
+        en: {
+            title: "SigbladFilum Simulator",
+            run: "Run",
+            stop: "Stop",
+            export: "Export",
+            import: "Import",
+            theme: "Theme",
+        },
+        ko: {
+            title: "SigbladFilum 시뮬레이터",
+            run: "실행",
+            stop: "정지",
+            export: "내보내기",
+            import: "가져오기",
+            theme: "테마",
+        }
+    };
+    
+    let currentLang = 'ko';
+
+    function setLanguage(lang) {
+        if (!translations[lang]) return;
+        currentLang = lang;
+        localStorage.setItem('sigblad-lang', lang);
+
+        document.querySelectorAll('[data-i18n-key]').forEach(el => {
+            const key = el.dataset.i18nKey;
+            el.textContent = translations[lang][key] || el.textContent;
+        });
+
+        document.documentElement.lang = lang;
+        langKoBtn.classList.toggle('active', lang === 'ko');
+        langEnBtn.classList.toggle('active', lang === 'en');
+    }
+
+    function setupTheme() {
+        const savedTheme = localStorage.getItem('sigblad-theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        const applyTheme = (isDark) => {
+            themeToggle.checked = isDark;
+            document.body.classList.toggle('dark-mode', isDark);
+        };
+
+        if (savedTheme) {
+            applyTheme(savedTheme === 'dark');
+        } else {
+            applyTheme(systemPrefersDark);
+        }
+
+        themeToggle.addEventListener('change', () => {
+            const isDark = themeToggle.checked;
+            document.body.classList.toggle('dark-mode', isDark);
+            localStorage.setItem('sigblad-theme', isDark ? 'dark' : 'light');
+        });
+    }
+
     // --- Initial Setup ---
     runBtn.addEventListener('click', execute);
     stopBtn.addEventListener('click', stopExecution);
     exportBtn.addEventListener('click', exportData);
     importBtn.addEventListener('click', importData);
+    langKoBtn.addEventListener('click', () => setLanguage('ko'));
+    langEnBtn.addEventListener('click', () => setLanguage('en'));
 
     // Global listeners
     document.addEventListener('mouseup', handleMouseUp);
@@ -615,4 +681,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     createSpreadsheet();
     updateButtons();
+    setupTheme();
+    setLanguage(localStorage.getItem('sigblad-lang') || 'ko');
 }); 
