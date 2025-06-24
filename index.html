@@ -15,14 +15,27 @@
             <button id="export-btn" data-i18n-key="export">내보내기</button>
             <button id="import-btn" data-i18n-key="import">가져오기</button>
             
-            <div class="lang-switcher">
-                <button id="lang-ko">KO</button>
-                <button id="lang-en">EN</button>
+            <div class="dropdown">
+                <button id="examples-btn" class="dropdown-toggle" data-i18n-key="examples">예제</button>
+                <div id="examples-dropdown" class="dropdown-menu">
+                    <!-- Examples will be populated by JS -->
+                </div>
             </div>
             
-            <div class="theme-switcher">
-                <label for="theme-toggle" data-i18n-key="theme">테마</label>
-                <input type="checkbox" id="theme-toggle" aria-label="Toggle dark mode">
+            <button id="help-btn" data-i18n-key="help">도움말</button>
+            
+            <div class="settings-controls">
+                <div class="lang-switcher">
+                    <button id="lang-ko">KO</button>
+                    <button id="lang-en">EN</button>
+                </div>
+                
+                <div class="theme-switcher">
+                    <label class="switch">
+                        <input type="checkbox" id="theme-toggle" aria-label="Toggle dark mode">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
             </div>
         </div>
     </header>
@@ -31,6 +44,16 @@
             <!-- Spreadsheet will be generated here by JavaScript -->
         </div>
     </main>
+
+    <div id="help-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <div id="help-content"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="script.js"></script>
+    <div id="notification-bar"></div>
 </body>
 </html> 

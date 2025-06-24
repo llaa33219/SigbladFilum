@@ -1,0 +1,11 @@
+{
+    "title": "Example 1: Value Copy",
+    "title_ko": "예제 1: 값 복사",
+    "description": "Result in cell A1 after execution ⇒ Hello",
+    "description_ko": "실행 완료 후 A1 셀 값 ⇒ Hello",
+    "data": {
+        "A1": "change(B1, \"Hello\") [A2]",
+        "A2": "change(A1, B1) [A3]",
+        "A3": "end"
+    }
+} 

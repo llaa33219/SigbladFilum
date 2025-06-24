@@ -7,6 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('theme-toggle');
     const langKoBtn = document.getElementById('lang-ko');
     const langEnBtn = document.getElementById('lang-en');
+    const examplesBtn = document.getElementById('examples-btn');
+    const examplesDropdown = document.getElementById('examples-dropdown');
+    const helpBtn = document.getElementById('help-btn');
+    const helpModal = document.getElementById('help-modal');
+    const helpContent = document.getElementById('help-content');
+    const helpModalCloseBtn = helpModal.querySelector('.modal-close-btn');
+    const notificationBar = document.getElementById('notification-bar');
 
     const COLS = 26; // A-Z
     const ROWS = 100;
@@ -608,7 +615,21 @@ document.addEventListener('DOMContentLoaded', () => {
         input.click();
     }
 
-    // --- UI Features (Theme & i18n) ---
+    // --- UI Features (Theme, i18n, Examples, Help) ---
+    let notificationTimeout;
+    let lastNotificationTimer;
+    function showNotification(message) {
+        if(lastNotificationTimer) {
+            clearTimeout(lastNotificationTimer);
+        }
+        notificationBar.textContent = message;
+        notificationBar.classList.add('show');
+        
+        lastNotificationTimer = setTimeout(() => {
+            notificationBar.classList.remove('show');
+        }, 5000); // Hide after 5 seconds
+    }
+
     const translations = {
         en: {
             title: "SigbladFilum Simulator",
@@ -616,6 +637,8 @@ document.addEventListener('DOMContentLoaded', () => {
             stop: "Stop",
             export: "Export",
             import: "Import",
+            examples: "Examples",
+            help: "Help",
             theme: "Theme",
         },
         ko: {
@@ -624,6 +647,8 @@ document.addEventListener('DOMContentLoaded', () => {
             stop: "정지",
             export: "내보내기",
             import: "가져오기",
+            examples: "예제",
+            help: "도움말",
             theme: "테마",
         }
     };
@@ -643,6 +668,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.lang = lang;
         langKoBtn.classList.toggle('active', lang === 'ko');
         langEnBtn.classList.toggle('active', lang === 'en');
+        // Reload examples to update titles
+        loadExamples();
     }
 
     function setupTheme() {
@@ -667,6 +694,76 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    async function loadExamples() {
+        // Since we cannot list a directory from frontend, we hardcode the list.
+        const exampleFiles = [
+            '01_copy-value.json',
+            '02_conditional-branch.json',
+            '03_loop-stars.json',
+            '04_input-quit.json'
+        ];
+        
+        examplesDropdown.innerHTML = '';
+
+        for (const file of exampleFiles) {
+            try {
+                const res = await fetch(`examples/${file}`);
+                const example = await res.json();
+                
+                const link = document.createElement('a');
+                
+                const titleEl = document.createElement('strong');
+                titleEl.textContent = currentLang === 'ko' ? example.title_ko : example.title;
+
+                const descEl = document.createElement('span');
+                descEl.textContent = currentLang === 'ko' ? example.description_ko : example.description;
+
+                link.appendChild(titleEl);
+                link.appendChild(descEl);
+
+                link.onclick = () => {
+                    if (isRunning) return;
+                    sheetData = example.data;
+                    renderAllCells();
+                    clearSelection();
+                    examplesBtn.parentElement.classList.remove('show');
+
+                    const description = currentLang === 'ko' ? example.description_ko : example.description;
+                    if (description) {
+                        showNotification(titleEl.textContent);
+                    }
+                };
+                examplesDropdown.appendChild(link);
+
+            } catch(e) {
+                console.error(`Failed to load example ${file}:`, e);
+            }
+        }
+    }
+
+    function setupHelpModal() {
+        helpBtn.addEventListener('click', async () => {
+            const readmeFile = currentLang === 'ko' ? 'README-ko.md' : 'README.md';
+            try {
+                const res = await fetch(readmeFile);
+                const text = await res.text();
+                helpContent.innerHTML = marked.parse(text); // Use marked to parse markdown
+                helpModal.style.display = 'flex';
+            } catch (e) {
+                helpContent.textContent = 'Could not load help file.';
+                helpModal.style.display = 'flex';
+            }
+        });
+
+        const closeModal = () => helpModal.style.display = 'none';
+        helpModalCloseBtn.addEventListener('click', closeModal);
+        helpModal.addEventListener('click', (e) => {
+            if (e.target === helpModal) {
+                closeModal();
+            }
+        });
+    }
+
     // --- Initial Setup ---
     runBtn.addEventListener('click', execute);
     stopBtn.addEventListener('click', stopExecution);
@@ -675,12 +772,28 @@ document.addEventListener('DOMContentLoaded', () => {
     langKoBtn.addEventListener('click', () => setLanguage('ko'));
     langEnBtn.addEventListener('click', () => setLanguage('en'));
 
+    // Dropdown toggle
+    examplesBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        examplesBtn.parentElement.classList.toggle('show');
+    });
+
     // Global listeners
     document.addEventListener('mouseup', handleMouseUp);
     document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('click', (e) => {
+        // Close dropdown if clicked outside
+        if (!e.target.matches('.dropdown-toggle')) {
+            const dropdown = document.querySelector('.dropdown.show');
+            if (dropdown) {
+                dropdown.classList.remove('show');
+            }
+        }
+    });
 
     createSpreadsheet();
     updateButtons();
     setupTheme();
+    setupHelpModal();
     setLanguage(localStorage.getItem('sigblad-lang') || 'ko');
 }); 

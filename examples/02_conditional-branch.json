@@ -1,0 +1,14 @@
+{
+    "title": "Example 2: Conditional Branch",
+    "title_ko": "예제 2: 조건 분기",
+    "description": "Before running, enter a number in cell B1. Check the result in cell C1 after execution. (The code checks if B1 = 4)",
+    "description_ko": "실행 전, B1 셀에 숫자를 입력하세요. 실행 후 C1 셀에서 결과를 확인합니다. (코드는 B1 = 4 인지 확인합니다)",
+    "data": {
+        "A1": "if(C3) [A2], [A3]",
+        "A2": "change(C1, \"True\") [A4]",
+        "A3": "change(C1, \"False\") [A4]",
+        "A4": "end",
+        "B1": "4",
+        "C3": "B1 = 4"
+    }
+} 
