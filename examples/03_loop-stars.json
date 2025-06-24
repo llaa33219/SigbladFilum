@@ -1,15 +1,15 @@
 {
-    "title": "Example 3: Loop 5 times",
-    "title_ko": "예제 3: 5회 반복",
-    "description": "This code prints '*' 5 times into cell B1. It uses B2 as a counter.",
-    "description_ko": "이 코드는 B1 셀에 '*'를 5번 출력합니다. B2셀을 카운터로 사용합니다.",
+    "title": "Example 3: Print 5 stars by repeating 5 times",
+    "title_ko": "예제 3: 5회 반복으로 별 5개 출력",
+    "description": "Before running, enter 5 in cell B2 (counter) and an empty string in cell B1 (output target). Result in cell B1 after execution ⇒ *****",
+    "description_ko": "실행 전, B2 셀에 5(카운터)를, B1 셀에 빈 문자열(출력 대상)을 입력하세요. 실행 후 B1 셀 결과 ⇒ *****",
     "data": {
-        "A1": "change(B1, \"\") [A2]",
-        "A2": "change(B2, 5) [A3]",
-        "A3": "change(B3, \"B2 > 0\") [A4]",
-        "A4": "if(B3) [A5], [A7]",
-        "A5": "change(B1, B1 + \"*\") [A6]",
-        "A6": "change(B2, B2 - 1) [A3]",
-        "A7": "end"
+        "A1": "change(B2, \"5\") [A2]",
+        "A2": "change(B3, \"B2 = 0\") [A3]",
+        "A3": "change(B4, B1 + \"*\") [A4]",
+        "A4": "if(B3) [A6], [A5]",
+        "A5": "change(B1, B4) [A7]",
+        "A6": "end",
+        "A7": "change(B2, B2 - 1) [A3]"
     }
 } 

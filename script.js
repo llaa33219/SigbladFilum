@@ -232,15 +232,21 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isFinished) return;
             isFinished = true;
 
-            const finalValue = revert ? originalValue : input.value;
-
-            // Crucially, remove the input *before* updating the cell's text content,
-            // as updateCell -> renderCell will replace all children of the cell.
+            // The 'input' event now handles real-time updates.
+            // When editing is finished, we just remove the input element.
+            // If reverting, we explicitly update the cell back to its original value.
+            if (revert) {
+                updateCell(cell.id, originalValue);
+            }
+            
             cell.removeChild(input);
-
-            updateCell(cell.id, finalValue);
             cell.classList.remove('active-cell');
         };
+
+        // Real-time update
+        input.addEventListener('input', () => {
+            updateCell(cell.id, input.value);
+        });
 
         input.addEventListener('blur', () => finishEditing());
 
@@ -274,6 +280,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderCell(cellId) {
         const cell = document.getElementById(cellId);
         if (cell) {
+            // If the cell is currently being edited, don't destroy the input element.
+            if (cell.querySelector('input')) {
+                return;
+            }
             cell.textContent = getCellValue(cellId);
         }
     }
@@ -531,15 +541,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!targetCellId) throw new Error(`Invalid cell in input: ${argsStr}`);
                 const targetCellElement = document.getElementById(targetCellId);
 
-                await new Promise(resolve => {
-                    startEditing(targetCellElement, true);
-                    const input = targetCellElement.querySelector('input');
-                    if (input) {
-                        input.addEventListener('blur', resolve, { once: true });
-                    } else {
-                        resolve(); 
-                    }
-                });
+                startEditing(targetCellElement, true);
                 
                 const nextMatch = nextCellPart.match(/\[(.*?)\]/);
                 if (!nextMatch) throw new Error(`Missing next cell for input: ${nextCellPart}`);

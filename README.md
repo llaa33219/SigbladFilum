@@ -187,7 +187,7 @@ If complex calculations are needed, you must **sequentially store intermediate r
 |     | A                                                    | B | C |
 |-----|------------------------------------------------------|---|---|
 | 1   | `input(B1) [A2]`                                     |   |   |
-| 2   | `change(B3, "B1 = \"quit\"") [A3]`                |   |   |
+| 2   | `change(B3, "B1 = "quit"") [A3]`                |   |   |
 | 3   | `if(B3) [A7], [A4]`                                  |   |   |
 | 4   | `wait(1000) [A5]`                                    |   |   |
 | 5   | `change(C1, B1) [A6]`                                |   |   |

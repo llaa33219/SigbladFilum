@@ -5,7 +5,7 @@
     "description_ko": "사용자가 B1에 'quit' 이외의 문자열을 입력하면 1초 후 C1 셀에 복사됩니다. 'quit'을 입력하면 프로그램이 종료됩니다.",
     "data": {
         "A1": "input(B1) [A2]",
-        "A2": "change(B3, \"B1 = \\\"quit\\\"\") [A3]",
+        "A2": "change(B3, \"B1 = \"quit\"\") [A3]",
         "A3": "if(B3) [A7], [A4]",
         "A4": "wait(1000) [A5]",
         "A5": "change(C1, B1) [A6]",
